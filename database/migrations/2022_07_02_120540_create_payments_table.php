@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Student;
+use App\Models\Session;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,11 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('libraries', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('account_no');
-            $table->foreignIdFor(Student::class, 'mat_no');
-            $table->integer('status')->default(0);
+            $table->string('teller_id');
+            $table->string('description');
+            $table->foreignIdFor(Session::class, 'id');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('libraries');
+        Schema::dropIfExists('payments');
     }
 };

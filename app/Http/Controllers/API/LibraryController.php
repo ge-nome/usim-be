@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Library;
 use Illuminate\Http\Request;
 
 class LibraryController extends Controller
@@ -25,7 +26,7 @@ class LibraryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $
     }
 
     /**
@@ -34,9 +35,10 @@ class LibraryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        Library::all()->where('mat_no', 'like', "%{$request->mat_no }%");
+
     }
 
     /**

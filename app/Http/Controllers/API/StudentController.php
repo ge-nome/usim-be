@@ -13,13 +13,13 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request  )
+    public function index(Request $request)
     {
         $student = Student::all()
-        ->where('mat_no', 'like', "%{$request->mat_no}%");
+        ->where('mat_no', $request->mat_no);
         return response()->json([
             'status'=>200,
-            'student'=>$student
+            'data'=>$student
         ]);
     }
 
@@ -31,19 +31,20 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'surname'=>'required',
-            'firstname'=>'required',
-            'email'=>'required|email',
-            'phone'=>'required',
-            'passport'=>'required|mimes:jpg,png,jpeg|max:5048',
-        ]);
+        // $request->validate([
+        //     'surname'=>'required',
+        //     'firstname'=>'required',
+        //     'email'=>'required|email',
+        //     'phone'=>'required',
+        //     'passport'=>'required|mimes:jpg,png,jpeg|max:5048',
+        // ]);
 
-        $imageFile = $request->firstname.$request->surname.'.'.$request->passport->extension();
+        // $imageFile = $request->firstname.$request->surname.'.'.$request->passport->extension();
 
-        $request->passport->move(public_path('storage/'), $imageFile);
+        // $request->passport->move(public_path('storage/'), $imageFile);
 
         $student = Student::create([
+            'mat_no'=>$request->mat_no,
             'surname'=>$request->input('surname'),
             'firstname'=>$request->input('firstname'),
             'othername'=>$request->input('othername'),
@@ -53,15 +54,11 @@ class StudentController extends Controller
             'school_id'=>$request->input('school_id'),
             'course_id'=>$request->input('course_id'),
             'level_id'=>$request->input('level_id'),
-            'passport'=>$imageFile,
+            'passport'=>$request->passport,
         ]);
         $student->save();
 
-        return response()->json([
-            'status'=>"Success",
-            'message'=>"Registration Successful",
-            'data'=>$student
-        ], 200);
+        return response()->json(Student::all()->where('mat_no', $request->mat_no));
     }
 
     /**
@@ -70,9 +67,9 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Request $request)
     {
-        return response()->json(Student::all(), 200);
+        return response()->json(Student::all()->where('mat_no', $request->mat_no), 200);
     }
 
     /**
@@ -84,7 +81,17 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Student::where('qr_hash', $request->qr_hash)->update([
+            'surname'=>$request->surname,
+            'firstname'=>$request->firstname,
+            'othername'=>$request->othername,
+            'dob'=>$request->dob,
+            'phone'=>$request->phone,
+            'email'=>$request->email,
+            'school_id'=>$request->school_id,
+            'course_id'=>$request->course_id,
+            'level_id'=>$request->level_id,
+        ]);
     }
 
     /**

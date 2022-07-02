@@ -27,6 +27,7 @@ return new class extends Migration
             $table->foreignId("level_id")->constrained();
             $table->integer("status")->default(1);
             $table->text("passport");
+            $table->text('qr_hash')->default(bcrypt('mat_no'));
             $table->timestamps();
         });
     }
