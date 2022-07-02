@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId("school_id")->constrained();
             $table->foreignId("course_id")->constrained();
             $table->foreignId("level_id")->constrained();
-            $table->integer("status");
+            $table->integer("status")->default(1);
             $table->text("passport");
             $table->timestamps();
         });

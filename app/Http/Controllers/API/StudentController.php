@@ -13,7 +13,7 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request  )
     {
         $student = Student::all()
         ->where('mat_no', 'like', "%{$request->mat_no}%");
@@ -58,9 +58,10 @@ class StudentController extends Controller
         $student->save();
 
         return response()->json([
-            'status'=>200,
+            'status'=>"Success",
             'message'=>"Registration Successful",
-        ]);
+            'data'=>$student
+        ], 200);
     }
 
     /**
@@ -69,9 +70,9 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        return response()->json(Student::all(), 200);
     }
 
     /**
