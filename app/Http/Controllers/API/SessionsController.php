@@ -15,7 +15,7 @@ class SessionsController extends Controller
      */
     public function index()
     {
-        //
+        return response(Session::all());
     }
 
     /**
@@ -34,7 +34,10 @@ class SessionsController extends Controller
             'session'=>$request->session
         ]);
         
-        //
+        return response()->json([
+            'Message' => "New Session Started Successfully!",
+            'Status' => "200"
+        ]);
     }
 
     /**

@@ -23,7 +23,7 @@ Route::post('/update', [StudentController::class, 'update']);
 Route::post('/archive', [StudentController::class, 'delete']);
 
 Route::post('/new-session', [SessionsController::class, "store"]);
-Route::post('/list-session', [SessionsController::class, "show"]);
+Route::post('/list-session', [SessionsController::class, "index"]);
 
 Route::post('/lib-new', [LibraryController::class, 'store']);
 Route::post('/lib-hist', [LibraryController::class, 'show']);
