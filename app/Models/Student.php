@@ -21,6 +21,7 @@ class Student extends Model
         'school_id',
         'course_id',
         'level_id',
+        'qr_hash',
         'passport',
     ];
     

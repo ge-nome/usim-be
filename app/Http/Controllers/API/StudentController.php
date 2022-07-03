@@ -43,6 +43,8 @@ class StudentController extends Controller
 
         // $request->passport->move(public_path('storage/'), $imageFile);
 
+        $qr = bcrypt($request->mat_no);
+
         $student = Student::create([
             'mat_no'=>$request->mat_no,
             'surname'=>$request->input('surname'),
@@ -54,6 +56,7 @@ class StudentController extends Controller
             'school_id'=>$request->input('school_id'),
             'course_id'=>$request->input('course_id'),
             'level_id'=>$request->input('level_id'),
+            'qr_hash'=>$qr,
             'passport'=>$request->passport,
         ]);
         $student->save();

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\Library;
+use App\Models\Session;
 use Illuminate\Http\Request;
 
-class LibraryController extends Controller
+class SessionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +26,15 @@ class LibraryController extends Controller
      */
     public function store(Request $request)
     {
+        Session::where('status', 1)->update([
+            'status'=>0
+        ]);
+
+        Session::create([
+            'session'=>$request->session
+        ]);
         
+        //
     }
 
     /**
@@ -35,10 +43,9 @@ class LibraryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show($id)
     {
-        Library::all()->where('mat_no', 'like', "%{$request->mat_no }%");
-
+        //
     }
 
     /**

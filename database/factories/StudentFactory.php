@@ -18,18 +18,19 @@ class StudentFactory extends Factory
     public function definition()
     {
         return [
-            'mat_no' => Str::random(10),
-            'surname' => fake()->name(),
-            'firstname' => fake()->name(),
-            'othername' => fake()->name(),
+            'mat_no' => "2019/".fake()->numberBetween(10,15),
+            'surname' => fake()->lastName(),
+            'firstname' => fake()->firstName(),
+            'othername' => fake()->userName(),
             'dob' => fake()->date(),
             'phone' => fake()->phoneNumber(),
             'email' => fake()->safeEmail(),
-            'school_id' => 1,
-            'course_id' => 1,
-            'level_id' => 1,
+            'school_id' => fake()->numberBetween(1, 6),
+            'course_id' => fake()->numberBetween(1, 5),
+            'level_id' => fake()->numberBetween(1, 4),
             'status' => 1,
-            'passport' => fake()->address() ,
+            'qr_hash' =>bcrypt($this->mat_no),
+            'passport' => fake()->image(),
             //
         ];
     }
