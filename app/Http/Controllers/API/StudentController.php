@@ -31,17 +31,17 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'surname'=>'required',
-        //     'firstname'=>'required',
-        //     'email'=>'required|email',
-        //     'phone'=>'required',
-        //     'passport'=>'required|mimes:jpg,png,jpeg|max:5048',
-        // ]);
+        $request->validate([
+            'surname'=>'required',
+            'firstname'=>'required',
+            'email'=>'required|email',
+            'phone'=>'required',
+            'passport'=>'required|mimes:jpg,png,jpeg|max:5048',
+        ]);
 
-        // $imageFile = $request->firstname.$request->surname.'.'.$request->passport->extension();
+        $imageFile = $request->firstname.$request->surname.'.'.$request->passport->extension();
 
-        // $request->passport->move(public_path('storage/'), $imageFile);
+        $request->passport->move(public_path('storage/'), $imageFile);
 
         $qr = bcrypt($request->mat_no);
 
@@ -57,11 +57,11 @@ class StudentController extends Controller
             'course_id'=>$request->input('course_id'),
             'level_id'=>$request->input('level_id'),
             'qr_hash'=>$qr,
-            'passport'=>$request->passport,
+            'passport'=>$imageFile,
         ]);
         $student->save();
 
-        return response()->json(Student::all()->where('mat_no', $request->mat_no));
+        return $this->show($request);
     }
 
     /**
@@ -72,7 +72,7 @@ class StudentController extends Controller
      */
     public function show(Request $request)
     {
-        return response()->json(Student::all()->where('mat_no', $request->mat_no), 200);
+        return response()->json(Student::all()->where('qr_hash', $request->qr_hash), 200);
     }
 
     /**
@@ -95,6 +95,7 @@ class StudentController extends Controller
             'course_id'=>$request->course_id,
             'level_id'=>$request->level_id,
         ]);
+        return $this->show($request);
     }
 
     /**
