@@ -61,7 +61,8 @@ class StudentController extends Controller
         ]);
         $student->save();
 
-        return $this->show($request);
+        return response()->json(Student::all()
+        ->where('mat_no', $request->mat_no));
     }
 
     /**
@@ -72,7 +73,8 @@ class StudentController extends Controller
      */
     public function show(Request $request)
     {
-        return response()->json(Student::all()->where('qr_hash', $request->qr_hash), 200);
+        return response()->json(Student::all()
+        ->where('qr_hash', $request->qr_hash), 200);
     }
 
     /**
@@ -91,7 +93,6 @@ class StudentController extends Controller
             'dob'=>$request->dob,
             'phone'=>$request->phone,
             'email'=>$request->email,
-            'school_id'=>$request->school_id,
             'course_id'=>$request->course_id,
             'level_id'=>$request->level_id,
         ]);

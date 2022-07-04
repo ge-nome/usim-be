@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\LibraryController;
+use App\Http\Controllers\API\MedicalsController;
+use App\Http\Controllers\api\PaymentsController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\SessionsController;
 use Illuminate\Http\Request;
@@ -28,6 +31,15 @@ Route::post('/list-session', [SessionsController::class, "index"]);
 Route::post('/lib-new', [LibraryController::class, 'store']);
 Route::post('/lib-hist', [LibraryController::class, 'show']);
 Route::post('/lib-update', [LibraryController::class, 'update']);
+
+Route::post('/medical', [MedicalsController::class, 'store']);
+Route::post('/medical-record', [MedicalsController::class, 'show']);
+Route::post('/medical-update', [MedicalsController::class, 'update']);
+
+Route::post('/admin-dashboard', [AdminController::class, 'show']);
+
+Route::post('/transaction', [PaymentsController::class, 'store']);
+Route::post('/view-transaction', [PaymentsController::class, 'show']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

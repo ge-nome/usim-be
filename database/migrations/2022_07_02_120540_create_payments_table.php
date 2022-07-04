@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('teller_id');
+            $table->string('mat_no');
             $table->string('description');
             $table->foreignIdFor(Session::class, 'session_id');
             $table->timestamps();
