@@ -16,14 +16,13 @@ class LibraryController extends Controller
      */
     public function store(Request $request)
     {
-        Library::create([
+        return Library::create([
             'account_no' => $request->account_no,
             'mat_no' => $request->mat_no,
-            'return_date'=>$request->return_date
+            'return_date'=>$request->return_date,
+            'status'=> 0
         ]);
-        return response()->json([
-            'message' => 'Update Successful',
-        ]);
+        
 
     }
 
@@ -34,7 +33,10 @@ class LibraryController extends Controller
      */
     public function show(Request $request)
     {
-        return response()->json(Library::all()->where('mat_no', $request->mat_no));
+        $info = Library::where('mat_no', $request->mat_no)->get();
+        return response(
+            $info
+        );
     }
 
     /**
@@ -45,20 +47,9 @@ class LibraryController extends Controller
      */
     public function update(Request $request)
     {
-        try {
-                
-            Library::where('mat_no', $request->mat_no)->where('id', $request->id)
-            ->update([
+            $library =  Library::where('mat_no', $request->mat_no)->where('id', $request->id)->update([
                 'status'=>1,
             ]);
-            return response()->json([
-                "message" =>"Update Successful"
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'Message'=>'Unable to update record',
-                'data'=>$th
-            ]);
-        }
+            return Library::where('mat_no', $request->mat_no)->where('id', $request->id)->get();
     }
 }

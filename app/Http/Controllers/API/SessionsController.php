@@ -15,7 +15,12 @@ class SessionsController extends Controller
      */
     public function index()
     {
-        return response(Session::all());
+        $prev = Session::where('status', 0)->get();
+        $now = Session::where('status', 1)->get();
+        return response([
+            'prev'=>$prev,
+            'now'=>$now
+        ]);
     }
 
     /**
@@ -30,13 +35,12 @@ class SessionsController extends Controller
             'status'=>0
         ]);
 
-        Session::create([
+        $sess = Session::create([
             'session'=>$request->session
         ]);
         
         return response()->json([
-            'Message' => "New Session Started Successfully!",
-            'Status' => "200"
+            $sess
         ]);
     }
 }

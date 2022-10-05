@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\Department;
+use App\Models\Level;
+use App\Models\School;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -32,10 +36,13 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'surname'=>'required',
-            'firstname'=>'required',
-            'email'=>'required|email',
-            'phone'=>'required',
+            'surname'=>'required|string',
+            'firstname'=>'required|string',
+            'department'=>'required|string',
+            'school'=>'required|string',
+            'course'=>'required|string',
+            'level'=>'required|string',
+            'school'=>'required',
             'passport'=>'required|mimes:jpg,png,jpeg|max:5048',
         ]);
 
@@ -43,21 +50,18 @@ class StudentController extends Controller
 
         $request->passport->move(public_path('storage/'), $imageFile);
 
-        $qr = bcrypt($request->mat_no);
+        $qr = trim(bcrypt($request->mat_no), "/");
 
-        $student = Student::create([
-            'mat_no'=>$request->mat_no,
-            'surname'=>$request->input('surname'),
-            'firstname'=>$request->input('firstname'),
-            'othername'=>$request->input('othername'),
-            'dob'=>$request->input('dob'),
-            'phone'=>$request->input('phone'),
-            'email'=>$request->input('email'),
-            'school_id'=>$request->input('school_id'),
-            'course_id'=>$request->input('course_id'),
-            'level_id'=>$request->input('level_id'),
+        return $student = Student::create([
+            'mat_no'=>$request['mat_no'],
+            'surname'=>$request['surname'],
+            'firstname'=>$request['firstname'],
+            'department'=>$request['department'],
+            'school'=>$request['school'],
+            'course'=>$request['course'],
+            'level'=>$request['level'],
             'qr_hash'=>$qr,
-            'passport'=>$imageFile,
+            'passport'=>$imageFile
         ]);
         $student->save();
 
@@ -73,8 +77,7 @@ class StudentController extends Controller
      */
     public function show(Request $request)
     {
-        return response()->json(Student::all()
-        ->where('qr_hash', $request->qr_hash), 200);
+        return Student::where('qr_hash', $request['qr_hash'])->get();
     }
 
     /**
@@ -84,17 +87,16 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        Student::where('qr_hash', $request->qr_hash)->update([
+        $get = Student::where('qr_hash', $request->qr_hash)->update([
+            'mat_no'=>$request->mat_no,
             'surname'=>$request->surname,
             'firstname'=>$request->firstname,
-            'othername'=>$request->othername,
-            'dob'=>$request->dob,
-            'phone'=>$request->phone,
-            'email'=>$request->email,
-            'course_id'=>$request->course_id,
-            'level_id'=>$request->level_id,
+            'department'=>$request->department,
+            'school'=>$request->school,
+            'course'=>$request->course,
+            'level'=>$request->level
         ]);
         return $this->show($request);
     }
@@ -108,5 +110,27 @@ class StudentController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function others(Request $request)
+    {   
+        // return $request->course;
+        try {
+            $dept = Department::where('id', $request->department)->get('department');       
+            $lev = Level::where('id', $request->level)->get('level');       
+            $sch = School::where('id', $request->school)->get('school');       
+            $crs = Course::where('id', $request->course)->get('course');
+    
+            return response()->json([
+                'depart' => $dept,
+                'level' => $lev,
+                'school' => $sch,
+                'course' => $crs,
+            ]); 
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'unable to collect data',
+                'error' => $th,
+            ]);
+        }
     }
 }

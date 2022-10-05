@@ -19,12 +19,10 @@ return new class extends Migration
             $table->string("surname");
             $table->string("firstname");
             $table->string("othername")->nullable();
-            $table->date("dob");
-            $table->string("phone")->unique();
-            $table->string("email")->unique();
-            $table->foreignId("school_id")->constrained();
-            $table->foreignId("course_id")->constrained();
-            $table->foreignId("level_id")->constrained();
+            $table->string("department");
+            $table->string("school");
+            $table->string("course");
+            $table->string("level");
             $table->integer("status")->default(1);
             $table->text("passport");
             $table->text('qr_hash');

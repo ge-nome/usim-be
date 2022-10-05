@@ -15,7 +15,7 @@ class PaymentsController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -26,10 +26,11 @@ class PaymentsController extends Controller
      */
     public function store(Request $request)
     {
-        Payments::create([
+        return Payments::create([
             'teller_id'=>$request->teller_id,
             'mat_no'=>$request->mat_no,
             'description'=>$request->desc,
+            'unit'=>$request->unit,
             'session_id'=>$request->sess,
         ]);
     }
@@ -42,7 +43,14 @@ class PaymentsController extends Controller
      */
     public function show(Request $request)
     {
-        return response()->json(Payments::all()->where('mat_no', $request->mat_no));
+        // return $request->authlev;
+        if($request->authlev === '1'){
+            return Payments::where('mat_no', $request->mat_no)->get();
+        }
+        else{
+            return Payments::where('unit', $request->authlev)->where('mat_no', $request->mat_no)->get();
+        }
+         
     }
 
     /**

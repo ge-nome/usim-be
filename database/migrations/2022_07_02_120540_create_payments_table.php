@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('teller_id');
             $table->string('mat_no');
             $table->string('description');
+            $table->string('unit');
             $table->foreignIdFor(Session::class, 'session_id');
             $table->timestamps();
         });

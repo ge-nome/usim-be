@@ -14,6 +14,7 @@ class Payments extends Model
         'teller_id',
         'description',
         'session_id',
+        'unit',
         'mat_no'
     ];
 }
